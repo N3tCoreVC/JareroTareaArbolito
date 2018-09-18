@@ -249,7 +249,7 @@ namespace arbolito
                         triangulo(caracterFigura, tamano);
                     } else {
                         Console.Write("\n Lo siento solo puedo hacer un " + 
-                                    "triangulo de base mayor a 1 y menor a 21."
+                                    "triangulo de base mayor a 1 y menor a 22."
                                     + " Intenta la próxima.");
                     }
                     break;
