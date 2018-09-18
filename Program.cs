@@ -13,6 +13,14 @@ namespace arbolito
             return respuesta;
         }
 
+         public static string repetirEsp(string a, int n){
+            string respuesta = "";
+            for (int i = 0; i < n; i++){
+                respuesta += a + ' ';
+            }
+            return respuesta;
+        }
+
         public static char[,] crearArregloChar(int dimen, char ch) {
             char[,] arreglo = new char[dimen, dimen + 1];
             for (int y = 0; y < dimen +1; y++ ) {
@@ -34,12 +42,18 @@ namespace arbolito
 
         public static Boolean validaTamFig(string fig, int tam){
             switch (fig) {
-                case "triangulo":
+                case "triangulo iso":
                     if (tam > 2 && tam < 42 ) {
                         return true;
                     } else {
                         return false;
-                    }                    
+                    }  
+                case "triangulo":
+                    if (tam > 1 && tam < 22 ) {
+                        return true;
+                    } else {
+                        return false;
+                    }                      
                 case "espiral":
                      if (tam > 4 && tam < 42 ) {
                         return true;
@@ -59,8 +73,10 @@ namespace arbolito
             try {
                 salida = Int16.Parse(respuesta);
             } catch (FormatException) {
-                Console.WriteLine("Lo siento pero el tamaño solo debe de ser un número entero válido.");
-                Console.WriteLine("Presiona cualquier tecla para continuar ...");
+                Console.WriteLine("Lo siento pero el tamaño solo debe de ser un"
+                                     + " número entero válido.");
+                Console.WriteLine("Presiona cualquier tecla para continuar " 
+                                    + "...");
                 Console.ReadLine();
                 Environment.Exit(0);
             }
@@ -81,7 +97,44 @@ namespace arbolito
                 return true;
             }           
         }
-        public static void triangulo(string a, int tamano){
+
+        public static string centradoTrian(string txt, int tamMax) {
+            int tamano = txt.Trim().Length;
+            int numEsp = (tamMax-tamano)/2;
+            string espacioD;
+            string espacioI = repetir(" ", numEsp);
+            if (tamano%2 == 0) {
+                espacioD = repetir(" ", numEsp + 1);
+            } else {
+                espacioD = espacioI;
+            }
+            return espacioI + txt.Trim() + espacioD;
+        }
+
+        public static void triangulo(string a, int tamano){            
+            int baseC = 1;
+            string salida = "";
+            if (validaChar(a.Trim())) {
+                Console.WriteLine("|-------------------------------------------"
+                                    + "|");
+                Console.WriteLine("|                  TRIANGULO                "
+                                    + "|");
+                Console.WriteLine("|-------------------------------------------"
+                                    + "|");
+                Console.WriteLine("|                                           "
+                                    + "|");              
+                do {
+                    salida = repetirEsp(a , baseC).Trim();
+                    Console.Write($"| {centradoTrian(salida,baseMax)} |\n");
+                    baseC = baseC + 1;            
+                } while (tamano >= baseC);
+                Console.WriteLine("|                                           "
+                                    + "|");
+                Console.WriteLine("|-------------------------------------------" 
+                                    + "|");
+            }
+        }
+        public static void trianguloIso(string a, int tamano){
             int baseC = 1;
             int espacios = 0;
             string salida = "";
@@ -102,13 +155,14 @@ namespace arbolito
                     Console.Write($"| {salida} |\n");
                     salida = "";
                     baseC = baseC + 2;            
-                } while (tamano >= baseC);            
+                } while (tamano >= baseC);
                 Console.WriteLine("|                                           "
                                     + "|");
                 Console.WriteLine("|-------------------------------------------" 
                                     + "|");
             }
         }
+
         public static void espiral(string a, int tamano){
             int numEsp = (baseMax-tamano)/2;
             string espacioD;
@@ -174,7 +228,9 @@ namespace arbolito
             Console.WriteLine("| 1 - Escribe un carácter para generar la   |");
             Console.WriteLine("|     figura.                               |");
             Console.WriteLine("| 2 - Selecciona la figura (trianguo o      |");
-            Console.WriteLine("|     espiral).                             |");
+            Console.WriteLine("|     espiral). Otra opción es triangulo    |");
+            Console.WriteLine("|     iso el cual dibuja un triangulo sin   |");
+            Console.WriteLine("|     espacios.                             |");
             Console.WriteLine("| 3 - Selecciona el tamaño de la figura.    |");
             Console.WriteLine("|     Toma en cuenta  que se trata de una   |");
             Console.WriteLine("|     figura cuadara por lo que la altura y |");
@@ -186,10 +242,24 @@ namespace arbolito
             figura = Console.ReadLine();
             figura = figura.Trim().ToLower();
             switch (figura) {
-                case "triangulo":
-                    tamano = solicitaTamano("¿Cuál será el tamaño de la base del triangulo, si el número no es non se usará el número inferor non más cercano?");
+                 case "triangulo":
+                    tamano = solicitaTamano("¿Cuántos carácteres tendrá el " 
+                                            + "triangulo en la base?");
                     if (validaTamFig(figura, tamano)) {
                         triangulo(caracterFigura, tamano);
+                    } else {
+                        Console.Write("\n Lo siento solo puedo hacer un " + 
+                                    "triangulo de base mayor a 1 y menor a 21."
+                                    + " Intenta la próxima.");
+                    }
+                    break;
+                case "triangulo iso":
+                    tamano = solicitaTamano("¿Cuál será el tamaño de la base "
+                                            + "del triangulo, si el número no" 
+                                            + " es non se usará el número " 
+                                            + "inferor non más cercano?");
+                    if (validaTamFig(figura, tamano)) {
+                        trianguloIso(caracterFigura, tamano);
                     } else {
                         Console.Write("\n Lo siento solo puedo hacer un " + 
                                     "triangulo de base mayor a 2 y menor a 42."
@@ -197,7 +267,8 @@ namespace arbolito
                     }
                     break;
                 case "espiral":
-                    tamano = solicitaTamano("¿Cuál será el tamaño de la base de la espiral?");
+                    tamano = solicitaTamano("¿Cuál será el tamaño de la base de" 
+                                            + " la espiral?");
                     if (validaTamFig(figura, tamano)) {
                         espiral(caracterFigura, tamano);
                     } else {
