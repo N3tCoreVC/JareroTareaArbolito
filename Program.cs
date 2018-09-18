@@ -241,6 +241,83 @@ namespace arbolito
             }
         }
 
+         public static void espiralMagico(int tamano){
+            int numEsp = (baseMax-tamano)/2;
+            int caracteresFaltantes = caracteresPorDibujar(tamano);
+            string espacioD;
+            string espacioI = repetir(" ", numEsp);
+            if (tamano%2 == 0) {
+                espacioD = repetir(" ", numEsp + 1);
+            } else {
+                espacioD = espacioI;
+            }
+            char[,] arreglo = crearArregloChar(tamano, ' ');
+            int dimensionX = arreglo.GetLength(0);
+            int dimensionY = arreglo.GetLength(1);
+            int posicionX = 0;
+            int posicionY = 0;            
+            if (true) {
+                Console.WriteLine("|-------------------------------------------"
+                                    + "|");
+                Console.WriteLine("|                   ESPIRAL                 "
+                                    + "|");
+                Console.WriteLine("|-------------------------------------------"
+                                    + "|");
+                Console.WriteLine("|                                           "
+                                    + "|");
+                for (int i = 0; i < dimensionX; i++) {                   
+                    arreglo.SetValue('\u2588',i,posicionY);
+                    posicionX = i;
+                }
+                for (int i = 1; i < dimensionY; i++) {
+                    arreglo.SetValue('\u2590',posicionX,i);
+                    posicionY = i;
+                }
+                dimensionX--;
+                dimensionY--;
+                int contadores = 1;
+                do
+                {                                   
+                    for (int i = 0; i <= dimensionX-contadores; i++) {
+                        posicionX--;
+                        caracteresFaltantes--;                                              
+                        arreglo.SetValue('\u2588',posicionX,posicionY);                        
+                    }           
+                    contadores++;                           
+                    if (caracteresFaltantes < 1) break;                        
+                    for (int i = 0; i < dimensionY-contadores; i++) {
+                        posicionY--;
+                        caracteresFaltantes--;
+                        arreglo.SetValue('\u258C',posicionX,posicionY);                       
+                    } 
+                    contadores++;             
+                    if (caracteresFaltantes < 1) break;                    
+                    for (int i = 0; i <= dimensionX-contadores; i++) {
+                        posicionX++;
+                        caracteresFaltantes--;
+                        arreglo.SetValue('\u2588',posicionX,posicionY);                        
+                    }   
+                    contadores++;                                    
+                    if (caracteresFaltantes < 1) break;                        
+                    for (int i = 0; i < dimensionY-contadores; i++) {
+                        posicionY++;
+                        caracteresFaltantes--;
+                        arreglo.SetValue('\u2590',posicionX,posicionY);                       
+                    } 
+                    contadores++;                          
+                } while (caracteresFaltantes > 0);
+                for (int pY = 0; pY < arreglo.GetLength(1); pY++){
+                    Console.WriteLine($"| {espacioI}" + 
+                                    $"{construirFila(arreglo, pY)}" + 
+                                    $"{espacioD} |"); 
+                }
+                Console.WriteLine("|                                           "
+                                    + "|");
+                Console.WriteLine("|-------------------------------------------"
+                                    + "|");
+            }
+        }
+
         public static int caracteresPorDibujar(int tamano) {
             tamano = tamano - 1;
             int acumulado = 0;
@@ -277,7 +354,7 @@ namespace arbolito
             caracterFigura = Console.ReadLine().Trim();
             Console.Write(" Figura a generar: ");
             figura = Console.ReadLine();
-            figura = figura.Trim().ToLower();
+            figura = figura.Trim().ToLower();;
             switch (figura) {
                  case "triangulo":
                     tmn = solicitaTamano("¿Cuántos carácteres tendrá el " 
@@ -313,6 +390,11 @@ namespace arbolito
                                     "espiral de base mayor a 4 y menor a 42."
                                     + " Intenta la próxima.");
                     }                                     
+                    break;
+                case "espiral magico":
+                    tmn = solicitaTamano("¿Cuál será el tamaño de la base de" 
+                                            + " la espiral?");
+                    espiralMagico(tmn);
                     break;
                 default: 
                     Console.Write("\n Lo siento solo puedo hacer un triangulo o"
